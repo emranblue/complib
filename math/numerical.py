@@ -3,7 +3,7 @@ import numpy as np
 import math as mt
 import os
 import matplotlib.pyplot as plt
-
+from matplotlib.animation import FuncAnimation as fn
 class Interpolation:  
     def __init__(self,**kwargs):
         if list(kwargs.keys())==[]:
@@ -94,10 +94,17 @@ class Node:
             y.append(y[i]+step*self.func(x[i],y[i]))
         y=np.array(y)
         return x,y  
+    def draw(self,ival,step,start,stop,color='green'):
+        plt.plot(*self.euler(ival,step,start,stop),color=color)  
+    def anim_euler(self,ival,frames,start,stop,interval=800,fps=2,color='green'):
+        fig,ax=plt.subplots()
+        ax.cla()
+        manim=fn(fig,lambda i:self.draw(ival,i,start,stop,color),frames=frames,repeat=False,interval=interval)
+        manim.save('complib_anim.mp4',fps=fps,writer='ffmpeg')
+        plt.show()
     def draw_euler(self,ival,step,start,stop):
-        plt.plot(*self.euler(ival,step,start,stop))
+        self.draw(ival,step,start,stop)
         plt.show()    
-
             
             
             
