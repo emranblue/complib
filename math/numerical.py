@@ -94,16 +94,25 @@ class Node:
             y.append(y[i]+step*self.func(x[i],y[i]))
         y=np.array(y)
         return x,y  
-    def draw(self,ival,step,start,stop,color='green'):
-        plt.plot(*self.euler(ival,step,start,stop),color=color)  
-    def anim_euler(self,ival,frames,start,stop,interval=800,fps=2,color='green'):
+    def draw(self,ival,step,start,stop,xlim,ylim,color='#904BB4'):
+        plt.xlim((-xlim, xlim))
+        plt.ylim((-ylim, ylim))
+        plt.autoscale(False)
+        plt.axis('off')
+        plt.plot(*self.euler(ival,step,start,stop),color=color,linewidth=2)  
+    def anim_euler(self,ival,frames,start,stop,xlim,ylim,fps=15,interval=500,color='#904BB4'):
+        plt.style.use('dark_background')
         fig,ax=plt.subplots()
-        ax.cla()
-        manim=fn(fig,lambda i:self.draw(ival,i,start,stop,color),frames=frames,repeat=False,interval=interval)
+        def animate(i):
+            ax.cla()
+            ax.axvline(color='white',linewidth=3)
+            ax.axhline(color='white',linewidth=3)
+            self.draw(ival,i,start,stop,xlim,ylim,color)
+        manim=fn(fig,animate,frames=frames,repeat=False,interval=interval)
         manim.save('complib_anim.mp4',fps=fps,writer='ffmpeg')
         plt.show()
-    def draw_euler(self,ival,step,start,stop):
-        self.draw(ival,step,start,stop)
+    def draw_euler(self,ival,step,start,stop,xlim=10,ylim=10):
+        self.draw(ival,step,start,stop,xlim,ylim)
         plt.show()    
             
             
