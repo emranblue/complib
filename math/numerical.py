@@ -4,6 +4,7 @@ import math as mt
 import os
 import matplotlib.pyplot as plt
 from matplotlib.animation import FuncAnimation as fn
+from complib.util.lib import *
 class Interpolation:  
     def __init__(self,**kwargs):
         if list(kwargs.keys())==[]:
@@ -85,8 +86,9 @@ class Nsolution:
     def fixed(self,a):
         pass
 class Node:
-    def __init__(self,func):
+    def __init__(self,func,main_func=None):
         self.func=func
+        self.main_func=main_func
     def euler(self,ival,step,start,stop):
         x=np.arange(start,stop+step,step)
         y=[ival]
@@ -94,25 +96,47 @@ class Node:
             y.append(y[i]+step*self.func(x[i],y[i]))
         y=np.array(y)
         return x,y  
-    def draw(self,ival,step,start,stop,xlim,ylim,color='#904BB4'):
+    def name(self):
+        loc=os.getcwd()
+        file_name='complib_anim'
+        extn='.mp4'
+        fname=file_name+extn
+        flist=os.listdir(loc)
+        i=0
+        while True:
+            if fname in flist:
+                i+=1
+                fname=file_name+str(i)+extn
+            else:
+                break
+        return fname                    
+    def draw(self,ival,step,start,stop,xlim,ylim,s,color):
         plt.xlim((-xlim, xlim))
         plt.ylim((-ylim, ylim))
         plt.autoscale(False)
         plt.axis('off')
-        plt.plot(*self.euler(ival,step,start,stop),color=color,linewidth=2)  
-    def anim_euler(self,ival,frames,start,stop,xlim,ylim,fps=15,interval=500,color='#904BB4'):
+        plt.text(xlim-3,ylim-1,s,fontsize=15)
+        plt.plot(*self.euler(ival,step,start,stop),color=color,linewidth=2,scalex=False,scaley=False)  
+    def anim_euler(self,ival,frames,start,stop,xlim=10,ylim=10,fps=15,show=True,interval=500,color='#904BB4'):
         plt.style.use('dark_background')
         fig,ax=plt.subplots()
+        dlist=np.linspace(0.1,xlim,200)
+        fname=self.name()
         def animate(i):
             ax.cla()
             ax.axvline(color='white',linewidth=3)
             ax.axhline(color='white',linewidth=3)
-            self.draw(ival,i,start,stop,xlim,ylim,color)
-        manim=fn(fig,animate,frames=frames,repeat=False,interval=interval)
-        manim.save('complib_anim.mp4',fps=fps,writer='ffmpeg')
-        plt.show()
-    def draw_euler(self,ival,step,start,stop,xlim=10,ylim=10):
-        self.draw(ival,step,start,stop,xlim,ylim)
+            s='h = {}'.format(i)
+            self.draw(ival,i,start,stop,xlim,ylim,s,color)
+            if not self.main_func==None:
+                plt.plot(dlist,self.main_func(dlist),linewidth=2,color='red')
+        manim=fn(fig,animate,frames=np.linspace(frames[0],frames[1],frames[2]),repeat=False,interval=interval)
+        manim.save(fname,fps=fps,writer='ffmpeg')
+        beep(0.3,400)    
+        if show:
+            os.system('xdg-open {}'.format(fname))
+    def draw_euler(self,ival,step,start,stop,xlim=10,ylim=10,color='#904BB4'):
+        self.draw(ival,step,start,stop,xlim,ylim,s,color)
         plt.show()    
             
             
