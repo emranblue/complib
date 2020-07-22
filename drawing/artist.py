@@ -117,7 +117,7 @@ class Art:
         
     def vector(self,x,y,color='red'):
         origin=[0],[0]
-        plt.quiver(*origin,x,y,color=color,scale_units='xy',units='xy',angles='xy',headlength=2.5,scale=1,width=0.35,alpha=3)    
+        plt.quiver(*origin,x,y,color=color,scale_units='xy',units='xy',angles='xy',scale=1,width=0.3,alpha=3)    
         
 
     def line(self,x0,y0,x,y):
