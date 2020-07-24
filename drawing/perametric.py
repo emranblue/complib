@@ -10,7 +10,7 @@ class Pera(Art):
             'DATA':100,
             'STAT':True,
             'UNIT':3,
-            'TRACKER_COLOR'='red',
+            'TRACKER_COLOR':'red',
             'PERAMETER_COLOR':'yellow'
             }
 
