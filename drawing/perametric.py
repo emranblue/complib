@@ -4,16 +4,11 @@ import numpy as np
 
 
 class Pera(Art):
-
-
-    CONFIG={
-            'DATA':100,
-            'STAT':True,
-            'UNIT':3,
-            'TRACKER_COLOR':'red',
-            'PERAMETER_COLOR':'yellow'
-            }
-
+    DATA=100
+    STAT=True
+    UNIT=3
+    TRACKER_COLOR='red'
+    PERAMETER_COLOR='yellow'
 
     def __init__(self,xfunc=None,yfunc=None):
         self.xf=xfunc
