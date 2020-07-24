@@ -15,15 +15,15 @@ class Pera(Art):
         self.yf=yfunc
 
 
-    def getpera(self,a,b,data=self.DATA,stat=self.STAT):
+    def getpera(self,a,b):
         
         def anim(i):
             self.pplot(a,b,self.xf,self.yf)
             self.point(self.xf(i),self.yf(i))
-            self.vector(self.xf(i),self.yf(i),color=self.TRACKER_COLOR)
-            if stat:
-                self.vector(self.UNIT*np.cos(i),self.UNIT*np.sin(i),color=self.PERAMETER_COLOR)
-        self.animate(anim,np.linspace(a,b,data))
+            self.vector(self.xf(i),self.yf(i),self.TRACKER_COLOR)
+            if self.STAT:
+                self.vector(self.UNIT*np.cos(i),self.UNIT*np.sin(i),self.PERAMETER_COLOR)
+        self.animate(anim,np.linspace(a,b,self.DATA))
         self.show_anim()
 
 
