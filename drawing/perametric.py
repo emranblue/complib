@@ -22,5 +22,5 @@ class Polar(Pera):
         self.yf=lambda x:func(x)*np.sin(x)
         self.t0=t0
         self.t1=t1
-    def getpolar(self,a,b):
+    def getpolar(self,a=self.t0,b=self.t1):
         self.getpera(a,b)

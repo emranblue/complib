@@ -3,6 +3,7 @@ import matplotlib.pyplot as plt
 from numpy import *
 import os
 import sys
+from platform import system
 from complib.util.lib import *
 
 class Art:
@@ -65,7 +66,8 @@ class Art:
         self.video=self.__name(fname)
         manim=anim(fig,animat,frames=frames,repeat=False,interval=0,fargs=arg)
         manim.save(self.video,fps=fps,writer='ffmpeg')
-        beep(0.5,350)
+        if system() is 'Linux':
+            beep(0.5,500)
 
 
     def fplot(self,func,xli=10,yli=10,color='#c869ff',axis='off',stat=False):
@@ -96,8 +98,14 @@ class Art:
 
 
     def show_anim(self):
+        systm=system()
         if not self.video==None:
-            os.system('xdg-open {}'.format(self.video))   
+            if systm=='Linux':
+                os.system('xdg-open {}'.format(self.video))   
+            elif systm=='Windows':
+                os.system('{}'.format(self.video))
+            else:
+                print("Not supported system")
         else:
             print("No video found")
 
