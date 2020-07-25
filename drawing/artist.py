@@ -7,15 +7,26 @@ from platform import system
 from complib.util.lib import *
 
 class Art:
+
+
+
+
+    '''If you want to customise anything,then change only class variable,that may work for you,you should not change any of those method below'''
+
+
+
     AXIS_COLOR='white'
+    AXIS_STATUS=True
     AXIS_WIDTH=1
-    FPS=10
+    FPS=15
     FILE_NAME='complib_anim'
     CENTER_LINE_COLOR='#65dbff'
     CENTER_LINE_WIDTH=2
     CENTER_LINE_ALPHA=3
     POINT_COLOR='white'
     VECTOR_COLOR='red'
+    VECTOR_WIDTH=0.3
+    VECTOR_ALPHA=3
     PROJECTION_COLOR='#c1ff5d'
     PROJECTION_WIDTH=4
     PROJECTION_ALPHA=3
@@ -32,6 +43,19 @@ class Art:
     AXIS='off'
     AUTOSCALE=False
     HZ=550
+    VIDEO_WRITER='ffmpeg'
+    WAIT=0.05
+
+
+
+
+
+
+
+
+
+
+
 
 
 
@@ -56,8 +80,9 @@ class Art:
 
 
     def __axis(self):
-        plt.axvline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
-        plt.axhline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
+        if self.AXIS_STATUS:
+            plt.axvline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
+            plt.axhline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
 
 
     def __design(self):
@@ -66,6 +91,10 @@ class Art:
         plt.ylim(-self.YLI, self.YLI)
         plt.autoscale(self.AUTOSCALE)
         plt.axis(self.AXIS)
+
+
+    def remove(self,fig):
+        plt.gca().lines.remove(fig)
 
 
     def __pdraw(self,a,b,xfunc,yfunc,color):
@@ -84,7 +113,7 @@ class Art:
 
 
     def pplot(self,a,b,xfunc,yfunc):
-        self.__pdraw(a,b,xfunc,yfunc,self.PPLOT_COLOR)
+        return self.__pdraw(a,b,xfunc,yfunc,self.PPLOT_COLOR)
         
 
 
@@ -92,19 +121,20 @@ class Art:
     def __vsave(self,fig,animat,frames,fps,fname):
         self.video=self.__name(fname)
         manim=anim(fig,animat,frames=frames,repeat=False,interval=0)
-        manim.save(self.video,fps=fps,writer='ffmpeg')
-        if system() is 'Linux':
+        manim.save(self.video,fps=fps,writer=self.VIDEO_WRITER)
+        if system()=='Linux':
             beep(0.5,self.HZ)
 
 
     def fplot(self,func):
-        self.__fdraw(func,self.FPLOT_COLOR)    
+        return self.__fdraw(func,self.FPLOT_COLOR)
 
 
     def show(self):
         plt.show()
 
-
+    def wait(self):
+        plt.pause(self.WAIT)
 
     def __anim(self,func,i):
         func(i)
@@ -115,12 +145,14 @@ class Art:
 
     def animate(self,func,fram):
         def animat(i):
-            plt.cla()
             func(i)
             self.__axis()
             self.__design()
         self.__vsave(plt.gcf(),animat,fram,fname=self.FILE_NAME,fps=self.FPS)
 
+
+    def clear(self):
+        plt.cla()
 
 
     def show_anim(self):
@@ -138,26 +170,26 @@ class Art:
 
 
     def from_center_to(self,x,y):
-        plt.plot([0,x],[0,y],color=color,linewidth=self.CENTER_LINE_WIDTH,alpha=self.CENTER_LINE_ALPHA)
+        return plt.plot([0,x],[0,y],color=self.CENTER_LINE_COLOR,linewidth=self.CENTER_LINE_WIDTH,alpha=self.CENTER_LINE_ALPHA)
 
     def point(self,x,y):
-        plt.scatter(x,y,color=self.POINT_COLOR)
+        return plt.scatter(x,y,color=self.POINT_COLOR)
 
     def project_on_x(self,x,y):
-        plt.plot([0,x],[0,0],color=self.PROJECTION_COLOR,linewidth=self.WIDTH,alpha=self.ALPHA)
+        return plt.plot([0,x],[0,0],color=self.PROJECTION_COLOR,linewidth=self.PROJECTION_WIDTH,alpha=self.PROJECTION_ALPHA)
 
     def project_on_y(self,x,y):
-        plt.plot([0,0],[0,y],color=self.PROJECTION_COLOR,linewidth=self.PROJECTON_WIDTH,alpha=self.PROJECTION_ALPHA)
+        return plt.plot([0,0],[0,y],color=self.PROJECTION_COLOR,linewidth=self.PROJECTION_WIDTH,alpha=self.PROJECTION_ALPHA)
         
     def vector(self,x,y,color=None):
         origin=[0],[0]
         if color is None:
             color=self.VECTOR_COLOR
-        plt.quiver(*origin,x,y,color=color,scale_units='xy',units='xy',angles='xy',scale=1,width=0.3,alpha=3)    
+        return plt.quiver(*origin,x,y,color=color,scale_units='xy',units='xy',angles='xy',scale=1,width=self.VECTOR_WIDTH,alpha=self.VECTOR_ALPHA)
         
 
     def line(self,x0,y0,x,y):
-        plt.plot([x0,x],[y0,y],color=self.LINE_COLOR,linewidth=self.CENTER_LINE_WIDTH,alpha=self.CENTER_LINE_ALPHA)
+        return plt.plot([x0,x],[y0,y],color=self.LINE_COLOR,linewidth=self.CENTER_LINE_WIDTH,alpha=self.CENTER_LINE_ALPHA)
 
 '''going...
 
