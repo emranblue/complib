@@ -4,7 +4,8 @@ import numpy as np
 
 
 class Pera(Art):
-    FRAME=100
+    DATA_PER_UNIT=100
+    FRAME=None
     TRACKER_STATUS=True
     UNIT=3
     TRACKER_COLOR='red'
@@ -15,7 +16,10 @@ class Pera(Art):
         self.yf=yfunc
 
 
-    def getpera(self,a,b):
+
+     
+
+    def setpera(self,a,b):
         
         def anim(i):
             self.clear()
@@ -26,6 +30,13 @@ class Pera(Art):
                 self.vector(self.UNIT*np.cos(i),self.UNIT*np.sin(i),self.PERAMETER_COLOR)
         self.animate(anim,np.linspace(a,b,self.FRAME))
         self.show_anim()
+
+
+
+    def getpera(self,a,b):
+        self.FRAME=self.DATA_PER_UNIT*(b-a)
+        self.setpera(a,b)
+
 
 
 class Polar(Pera):
@@ -39,4 +50,4 @@ class Polar(Pera):
 
     def getpolar(self,a,b):
         self.FRAME=int(self.DATA_PER_PI*(b-a)/np.pi)
-        self.getpera(a,b)
+        self.setpera(a,b)
