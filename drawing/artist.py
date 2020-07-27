@@ -14,7 +14,7 @@ class Art:
     '''If you want to customise anything,then change only class variable,that may work for you,you should not change any of those method below'''
 
 
-
+	DATA_PER_UNIT=100
     AXIS_COLOR='white'
     AXIS_STATUS=True
     AXIS_WIDTH=1
@@ -143,12 +143,12 @@ class Art:
 
 
 
-    def animate(self,func,fram):
+    def animate(self,func,a,b):
         def animat(i):
             func(i)
             self.__axis()
             self.__design()
-        self.__vsave(plt.gcf(),animat,fram,fname=self.FILE_NAME,fps=self.FPS)
+        self.__vsave(plt.gcf(),animat,linspace(a,b,self.DATA_PER_UNIT*(b-a)),fname=self.FILE_NAME,fps=self.FPS)
 
 
     def clear(self):
