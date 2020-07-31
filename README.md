@@ -1,14 +1,12 @@
 # complib
-System requirements are [ffmpeg](https://www.ffmpeg.org), [sox](http://sox.sourceforge.net).
+System requirement is [ffmpeg](https://www.ffmpeg.org)
 
 ### LINUX
 1. sudo apt install ffmpeg
-2. sudo apt install sox
 
 ### Directly (Windows)
 1. [Install FFmpeg](https://www.wikihow.com/Install-FFmpeg-on-Windows) for animaton
-2. [Install SoX](https://sourceforge.net/projects/sox/files/sox/) for sound///(not using untill now)
-3. Navigate the to the library folder from command line and run installer.py from command line by "python installer.py"
+2. Navigate the to the library folder from command line and run installer.py from command line by "python installer.py"
 
 ### system_work_for Windows
 1. open command line ,type ffmpeg and press enter

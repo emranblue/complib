@@ -5,66 +5,20 @@ import os
 import sys
 from platform import system
 from complib.util.lib import *
+from data import Data
 
-class Art:
-
-
+cdef class Art(Data):
 
 
     '''If you want to customise anything,then change only class variable,that may work for you,you should not change any of those method below'''
 
 
-	DATA_PER_UNIT=100
-    AXIS_COLOR='white'
-    AXIS_STATUS=True
-    AXIS_WIDTH=1
-    FPS=15
-    FILE_NAME='complib_anim'
-    CENTER_LINE_COLOR='#65dbff'
-    CENTER_LINE_WIDTH=2
-    CENTER_LINE_ALPHA=3
-    POINT_COLOR='white'
-    VECTOR_COLOR='red'
-    VECTOR_WIDTH=0.3
-    VECTOR_ALPHA=3
-    PROJECTION_COLOR='#c1ff5d'
-    PROJECTION_WIDTH=4
-    PROJECTION_ALPHA=3
-    LINE_COLOR='#57aa9e'
-    BACKGROUND='dark_background'
-    DATA_FOR_PDRAW=500
-    PDRAW_WIDTH=2
-    SCALEX=False
-    SCALEY=False
-    XLI=10
-    YLI=10
-    PPLOT_COLOR='#c79eff'
-    FPLOT_COLOR='#c869ff'
-    AXIS='off'
-    AUTOSCALE=False
-    HZ=550
-    VIDEO_WRITER='ffmpeg'
-    WAIT=0.05
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-    def __init__(self,func=None,video=None):
+    cdef void __init__(self,func=None,video=None):
         self.func=func
         self.video=video
 
 
-    def __name(self,file_name):
+    cpdef char* __name(self,file_name):
         loc=os.getcwd()
         extn='.mp4'
         fname=file_name+extn
@@ -79,13 +33,13 @@ class Art:
         return fname  
 
 
-    def __axis(self):
+    cpdef void __axis(self):
         if self.AXIS_STATUS:
             plt.axvline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
             plt.axhline(color=self.AXIS_COLOR,linewidth=self.AXIS_WIDTH)
 
 
-    def __design(self):
+    cpdef void __design(self):
         plt.style.use(self.BACKGROUND)
         plt.xlim(-self.XLI, self.XLI)
         plt.ylim(-self.YLI, self.YLI)
@@ -93,11 +47,11 @@ class Art:
         plt.axis(self.AXIS)
 
 
-    def remove(self,fig):
+    cdef void remove(self,fig):
         plt.gca().lines.remove(fig)
 
 
-    def __pdraw(self,a,b,xfunc,yfunc,color):
+    cpdef void __pdraw(self,a,b,xfunc,yfunc,color):
         data=linspace(a,b,self.DATA_FOR_PDRAW)
         self.__design()
         self.__axis()
@@ -106,19 +60,19 @@ class Art:
 
 
 
-    def __fdraw(self,func,color):
+    cpdef void __fdraw(self,func,color):
         data=linspace(-self.XLI,self.YLI,self.DATA_FOR_PDRAW)
         self.__design()
         plt.plot(data,func(data),linewidth=self.PDRAW_WIDTH,scalex=self.SCALEX,scaley=self.SCALEY,color=color)
 
 
-    def pplot(self,a,b,xfunc,yfunc):
-        return self.__pdraw(a,b,xfunc,yfunc,self.PPLOT_COLOR)
+    cdef void pplot(self,a,b,xfunc,yfunc):
+        self.__pdraw(a,b,xfunc,yfunc,self.PPLOT_COLOR)
         
 
 
 
-    def __vsave(self,fig,animat,frames,fps,fname):
+    cpdef void __vsave(self,fig,animat,frames,fps,fname):
         self.video=self.__name(fname)
         manim=anim(fig,animat,frames=frames,repeat=False,interval=0)
         manim.save(self.video,fps=fps,writer=self.VIDEO_WRITER)
@@ -126,24 +80,24 @@ class Art:
             beep(0.5,self.HZ)
 
 
-    def fplot(self,func):
-        return self.__fdraw(func,self.FPLOT_COLOR)
+    cdef void fplot(self,func):
+        self.__fdraw(func,self.FPLOT_COLOR)
 
 
-    def show(self):
+    cdef void show(self):
         plt.show()
 
-    def wait(self):
+    cdef void wait(self):
         plt.pause(self.WAIT)
 
-    def __anim(self,func,i):
+    cdef void __anim(self,func,i):
         func(i)
         self.__axis()
         self.__design()
 
 
 
-    def animate(self,func,a,b):
+    cdef void animate(self,func,a,b):
         def animat(i):
             func(i)
             self.__axis()
@@ -151,11 +105,11 @@ class Art:
         self.__vsave(plt.gcf(),animat,linspace(a,b,self.DATA_PER_UNIT*(b-a)),fname=self.FILE_NAME,fps=self.FPS)
 
 
-    def clear(self):
+    cdef void clear(self):
         plt.cla()
 
 
-    def show_anim(self):
+    cdef void show_anim(self):
         systm=system()
         if not self.video==None:
             if systm=='Linux':
